@@ -1,56 +1,57 @@
-USE student_4332981;
+CREATE DATABASE prac_db;
+USE prac_db;
 
 -- 1. GAMER TABLE
-CREATE TABLE `Gamer` (
-  `Gamer_ID` int PRIMARY KEY AUTO_INCREMENT,
-  `Username` varchar(255) NOT NULL,
-  `Email` varchar(255) UNIQUE,
-  `Date_of_Birth` date,
-  `Age` int
+CREATE TABLE Gamer (
+  Gamer_ID int PRIMARY KEY AUTO_INCREMENT,
+  Username varchar(255) NOT NULL,
+  Email varchar(255) UNIQUE,
+  Date_of_Birth date,
+  Age int
 );
 
 -- 2. GAMER_PHONE TABLE (Weak entity resolving a multivalued attribute)
-CREATE TABLE `Gamer_Phone` (
-  `Phone_ID` int PRIMARY KEY AUTO_INCREMENT,
-  `Gamer_ID` int,
-  `Phone_Number` varchar(20),
-  FOREIGN KEY (`Gamer_ID`) REFERENCES `Gamer` (`Gamer_ID`) ON DELETE CASCADE
+CREATE TABLE Gamer_Phone (
+  Phone_ID int PRIMARY KEY AUTO_INCREMENT,
+  Gamer_ID int,
+  Phone_Number varchar(20),
+  FOREIGN KEY (Gamer_ID) REFERENCES Gamer (Gamer_ID) ON DELETE CASCADE
 );
 
 -- 3. STAFF TABLE
-CREATE TABLE `Staff` (
-  `Staff_ID` int PRIMARY KEY AUTO_INCREMENT,
-  `Name` varchar(255)
+CREATE TABLE Staff (
+  Staff_ID int PRIMARY KEY AUTO_INCREMENT,
+  Name varchar(255)
 );
 
 -- 4. GAMING_STATION TABLE
-CREATE TABLE `Gaming_Station` (
-  `Station_ID` int PRIMARY KEY AUTO_INCREMENT,
-  `Tier` ENUM ('Standard', 'VIP_Pro') NOT NULL,
-  `Hourly_Rate` decimal(7,2) NOT NULL
+CREATE TABLE Gaming_Station (
+  Station_ID int PRIMARY KEY AUTO_INCREMENT,
+  Tier ENUM ('Standard', 'VIP_Pro') NOT NULL,
+  Hourly_Rate decimal(7,2) NOT NULL
 );
 
 -- 5. GAMING_SESSION TABLE (Bridge entity)
-CREATE TABLE `Gaming_Session` (
-  `Session_ID` int PRIMARY KEY AUTO_INCREMENT,
-  `Gamer_ID` int,
-  `Station_ID` int,
-  `Staff_ID` int,
-  `Start_Time` datetime,
-  `End_Time` datetime,
-  `Duration_Hours` decimal(5,2),
-  FOREIGN KEY (`Gamer_ID`) REFERENCES `Gamer` (`Gamer_ID`),
-  FOREIGN KEY (`Station_ID`) REFERENCES `Gaming_Station` (`Station_ID`),
-  FOREIGN KEY (`Staff_ID`) REFERENCES `Staff` (`Staff_ID`)
+CREATE TABLE Gaming_Session (
+  Session_ID int PRIMARY KEY AUTO_INCREMENT,
+  Gamer_ID int,
+  Station_ID int,
+  Staff_ID int,
+  Start_Time datetime,
+  End_Time datetime,
+  Duration_Hours decimal(5,2),
+  FOREIGN KEY (Gamer_ID) REFERENCES Gamer (Gamer_ID),
+  FOREIGN KEY (Station_ID) REFERENCES Gaming_Station (Station_ID),
+  FOREIGN KEY (Staff_ID) REFERENCES Staff (Staff_ID)
 );
 
 -- 6. INVOICE TABLE (Session_ID made UNIQUE to enforce 1:1 business rule)
-CREATE TABLE `Invoice` (
-  `Invoice_ID` int PRIMARY KEY AUTO_INCREMENT,
-  `Session_ID` int UNIQUE, 
-  `Total_Amount` decimal(7,2),
-  `Payment_Status` varchar(50),
-  FOREIGN KEY (`Session_ID`) REFERENCES `Gaming_Session` (`Session_ID`)
+CREATE TABLE Invoice (
+  Invoice_ID int PRIMARY KEY AUTO_INCREMENT,
+  Session_ID int UNIQUE, 
+  Total_Amount decimal(7,2),
+  Payment_Status varchar(50),
+  FOREIGN KEY (Session_ID) REFERENCES Gaming_Session (Session_ID)
 );
 
 -- DATA INSERTION

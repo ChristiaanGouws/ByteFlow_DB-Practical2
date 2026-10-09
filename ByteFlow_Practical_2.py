@@ -29,12 +29,12 @@ def main():
     try:
         # Connect to the UWC MySQL Server using your specific credentials
         connection = mysql.connector.connect(
-            host='172.21.12.21',
-            port=22981,
-            user='student_4332981',
-            password='!St4332981',
-            database='student_4332981', # Using your username as the DB name per UWC setup
-            ssl_disabled=False # SSL is required by the UWC server
+            host='localhost',
+            port=3306,
+            user='root',
+            password='',               # Leave this completely blank
+            database='my_local_db',# Change this if you renamed the database in setup.sql
+            ssl_disabled=True          
         )
 
         if connection.is_connected():
