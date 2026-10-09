@@ -27,14 +27,13 @@ def execute_and_print(cursor, query_name, query):
 
 def main():
     try:
-        # Connect to the UWC MySQL Server using your specific credentials
         connection = mysql.connector.connect(
-            host='localhost',
-            port=3306,
-            user='root',
-            password='',               # Leave this completely blank
-            database='my_local_db',# Change this if you renamed the database in setup.sql
-            ssl_disabled=True          
+            host='172.21.12.21',
+            port=22981,
+            user='4332981',
+            password='!St4332981',
+            database='prac_db',
+            auth_plugin='mysql_native_password'      
         )
 
         if connection.is_connected():
