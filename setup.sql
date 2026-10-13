@@ -7,7 +7,6 @@ CREATE TABLE Gamer (
   Username varchar(255) NOT NULL,
   Email varchar(255) UNIQUE,
   Date_of_Birth date,
-  Age int
 );
 
 -- 2. GAMER_PHONE TABLE (Weak entity resolving a multivalued attribute)
@@ -39,7 +38,6 @@ CREATE TABLE Gaming_Session (
   Staff_ID int,
   Start_Time datetime,
   End_Time datetime,
-  Duration_Hours decimal(5,2),
   FOREIGN KEY (Gamer_ID) REFERENCES Gamer (Gamer_ID),
   FOREIGN KEY (Station_ID) REFERENCES Gaming_Station (Station_ID),
   FOREIGN KEY (Staff_ID) REFERENCES Staff (Staff_ID)
@@ -55,11 +53,11 @@ CREATE TABLE Invoice (
 );
 
 -- DATA INSERTION
-INSERT INTO Gamer (Username, Email, Date_of_Birth, Age) VALUES 
-('ShadowKnight', 'shadow@gmail.com', '2001-05-14', 25),
-('PixelQueen', 'queen@yahoo.com', '1998-11-22', 27),
-('NoobSlayer', 'slayer@gaming.net', '2005-02-10', 21),
-('CyberNinja', 'ninja@gmail.com', '1995-07-30', 31);
+INSERT INTO Gamer (Username, Email, Date_of_Birth) VALUES 
+('ShadowKnight', 'shadow@gmail.com', '2001-05-14'),
+('PixelQueen', 'queen@yahoo.com', '1998-11-22'),
+('NoobSlayer', 'slayer@gaming.net', '2005-02-10'),
+('CyberNinja', 'ninja@gmail.com', '1995-07-30');
 
 INSERT INTO Gamer_Phone (Gamer_ID, Phone_Number) VALUES 
 (1, '555-0101'), (1, '555-0102'), (2, '555-0201'), (4, '555-0401');
@@ -70,11 +68,11 @@ INSERT INTO Staff (Name) VALUES
 INSERT INTO Gaming_Station (Tier, Hourly_Rate) VALUES 
 ('Standard', 15.00), ('Standard', 15.00), ('VIP_Pro', 30.00), ('VIP_Pro', 30.00);
 
-INSERT INTO Gaming_Session (Gamer_ID, Station_ID, Staff_ID, Start_Time, End_Time, Duration_Hours) VALUES 
-(1, 3, 1, '2026-10-10 14:00:00', '2026-10-10 16:30:00', 2.5),
-(2, 1, 2, '2026-10-10 15:00:00', '2026-10-10 16:00:00', 1.0),
-(3, 4, 1, '2026-10-11 10:00:00', '2026-10-11 14:00:00', 4.0),
-(1, 1, 2, '2026-10-12 18:00:00', '2026-10-12 20:00:00', 2.0);
+INSERT INTO Gaming_Session (Gamer_ID, Station_ID, Staff_ID, Start_Time, End_Time) VALUES 
+(1, 3, 1, '2026-10-10 14:00:00', '2026-10-10 16:30:00'),
+(2, 1, 2, '2026-10-10 15:00:00', '2026-10-10 16:00:00'),
+(3, 4, 1, '2026-10-11 10:00:00', '2026-10-11 14:00:00'),
+(1, 1, 2, '2026-10-12 18:00:00', '2026-10-12 20:00:00');
 
 INSERT INTO Invoice (Session_ID, Total_Amount, Payment_Status) VALUES 
 (1, 75.00, 'Paid'), (2, 15.00, 'Paid'), (3, 120.00, 'Pending'), (4, 30.00, 'Paid');
