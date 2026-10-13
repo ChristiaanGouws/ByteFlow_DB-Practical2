@@ -1,7 +1,7 @@
 """
-File Name: TeamName_Practical_2.py
+File Name: ByteFlow_Practical_2.py
 Team Name: ByteFlow
-Student Numbers: 4332981, [INSERT OTHER STUDENT NUMBERS]
+Student Numbers: 4332981, 4323227, 4388044, 4395423, 4101764, 4368679
 Description: Python script to connect to the UWC MySQL server, execute 10 queries 
 for the Pixel Arena Gaming Lounge scenario, and display the results.
 """
@@ -71,7 +71,7 @@ def main():
             execute_and_print(cursor, "Query 5 (Medium): Stations Above Average Rate", q5)
 
             q6 = """
-            SELECT SUM(Duration_Hours) AS Total_Hours_Played_Oct
+            SELECT ROUND(SUM(TIMESTAMPDIFF(MINUTE, Start_Time, End_Time) / 60.0), 2) AS Total_Hours_Played_Oct
             FROM Gaming_Session
             WHERE MONTH(Start_Time) = 10 AND YEAR(Start_Time) = 2026;
             """
@@ -90,11 +90,16 @@ def main():
             execute_and_print(cursor, "Query 7 (Complex): Gamers spending > $40", q7)
 
             q8 = """
-            SELECT g.Username, g.Age, st.Tier, gs.Duration_Hours
+            SELECT 
+                g.Username, 
+                TIMESTAMPDIFF(YEAR, g.Date_of_Birth, CURDATE()) AS Age, 
+                st.Tier, 
+                ROUND(TIMESTAMPDIFF(MINUTE, gs.Start_Time, gs.End_Time) / 60.0, 2) AS Duration_Hours
             FROM Gamer g
             INNER JOIN Gaming_Session gs ON g.Gamer_ID = gs.Gamer_ID
             INNER JOIN Gaming_Station st ON gs.Station_ID = st.Station_ID
-            WHERE (g.Age < 25 AND st.Tier = 'VIP_Pro') OR (gs.Duration_Hours > 3.0);
+            WHERE (TIMESTAMPDIFF(YEAR, g.Date_of_Birth, CURDATE()) < 25 AND st.Tier = 'VIP_Pro') 
+               OR ((TIMESTAMPDIFF(MINUTE, gs.Start_Time, gs.End_Time) / 60.0) > 3.0);
             """
             execute_and_print(cursor, "Query 8 (Complex): Young VIP Gamers OR Long Sessions", q8)
 
@@ -109,7 +114,10 @@ def main():
             execute_and_print(cursor, "Query 9 (Complex): Staff Processing Above-Average Revenue", q9)
 
             q10 = """
-            SELECT st.Tier, AVG(gs.Duration_Hours) AS Avg_Session_Length, SUM(i.Total_Amount) AS Total_Revenue
+            SELECT 
+                st.Tier, 
+                ROUND(AVG(TIMESTAMPDIFF(MINUTE, gs.Start_Time, gs.End_Time) / 60.0), 2) AS Avg_Session_Length, 
+                SUM(i.Total_Amount) AS Total_Revenue
             FROM Gaming_Station st
             INNER JOIN Gaming_Session gs ON st.Station_ID = gs.Station_ID
             INNER JOIN Invoice i ON gs.Session_ID = i.Session_ID
